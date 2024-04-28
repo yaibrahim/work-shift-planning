@@ -23,11 +23,18 @@ class Shift < ApplicationRecord
     range_8_16 = ((date.beginning_of_day + 8.hours).hour..(date.beginning_of_day + 16.hours).hour)
     range_16_24 = ((date.beginning_of_day + 16.hours).hour..24)
 
+    end_hour = 0
     end_time = Time.parse(self.end_time.to_s)
-    end_time = end_time.hour == 0 ? 24 : end_time.hour
 
-    unless [range_0_8, range_8_16, range_16_24].any? { |range| range.first == start_time.hour && range.last == end_time }
-      errors.add(:base, "Shift time range is invalid. Must be within 0-8, 8-16, or 16-24.")
+    if end_time.hour == 23 && end_time.min == 59 && end_time.sec == 59
+      end_hour = 24
+    else
+      end_hour = self.end_time.hour
+      end_hour = end_time.hour == 0 ? 24 : end_time.hour
+    end
+
+    unless [range_0_8, range_8_16, range_16_24].any? { |range| range.first == start_time.hour && range.last == end_hour }
+      errors.add(:baend_timese, "Shift time range is invalid. Must be within 0-8, 8-16, or 16-24.")
     end
   end
 
@@ -35,6 +42,7 @@ class Shift < ApplicationRecord
   def eight_hours_long_shift
     time_diff = 0
     time_diff = ((end_time - start_time) / 3600).abs if !start_time.blank? && !end_time.blank?
+    time_diff = time_diff.ceil if end_time.hour == 23 && end_time.min == 59 && end_time.sec == 59
     errors.add(:base, "Time duration must be equal to 8 hours") if time_diff < 8
   end
 end
