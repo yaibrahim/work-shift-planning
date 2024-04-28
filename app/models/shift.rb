@@ -19,11 +19,14 @@ class Shift < ApplicationRecord
 
   # It is a 24 hour timetable 0-8, 8-16, 16-24.
   def valid_time_range
-    range_0_8 = (date.beginning_of_day..date.beginning_of_day + 8.hours)
-    range_8_16 = (date.beginning_of_day + 8.hours..date.beginning_of_day + 16.hours)
-    range_16_24 = (date.beginning_of_day + 16.hours..date.end_of_day)
+    range_0_8 = (date.beginning_of_day.hour..(date.beginning_of_day + 8.hours).hour)
+    range_8_16 = ((date.beginning_of_day + 8.hours).hour..(date.beginning_of_day + 16.hours).hour)
+    range_16_24 = ((date.beginning_of_day + 16.hours).hour..24)
 
-    unless [range_0_8, range_8_16, range_16_24].any? { |range| range.first == start_time && range.last == end_time }
+    end_time = Time.parse(self.end_time.to_s)
+    end_time = end_time.hour == 0 ? 24 : end_time.hour
+
+    unless [range_0_8, range_8_16, range_16_24].any? { |range| range.first == start_time.hour && range.last == end_time }
       errors.add(:base, "Shift time range is invalid. Must be within 0-8, 8-16, or 16-24.")
     end
   end
