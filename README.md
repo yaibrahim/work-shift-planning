@@ -3,7 +3,9 @@
 
 `Business requirements:`
 
-`A worker has shifts A shift is 8 hours long.`
+`A worker has shifts.`
+
+`A shift is 8 hours long.`
 
 `A worker never has two shifts on the same day.`
 
