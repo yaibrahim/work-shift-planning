@@ -1,5 +1,5 @@
 class WorkersController < ApplicationController
-    before_action :set_worker, only: [:show, :update, :destroy]
+    before_action :set_worker, only: [:show, :update, :destroy, :get_shifts]
   
     def index
       @workers = Worker.all
@@ -16,6 +16,14 @@ class WorkersController < ApplicationController
         render json: @worker, status: :created
       else
         render json: @worker.errors, status: :unprocessable_entity
+      end
+    end
+
+    def get_shifts
+      if @worker.shifts.present?
+        render json: @worker.shifts
+      else
+        render json: {"message": "The worker has no shifts."}
       end
     end
   
