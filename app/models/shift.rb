@@ -12,7 +12,7 @@ class Shift < ApplicationRecord
 
   # A worker never has two shifts on the same day.
   def no_overlapping_shifts
-    if worker.present? && worker.shifts.where(date: date).any?
+    if self.new_record? && worker.present? && worker.shifts.where(date: date).any?
       errors.add(:base, "Worker cannot have two shifts on the same day")
     end
   end

@@ -51,4 +51,41 @@ RSpec.describe ShiftsController, type: :controller do
       }.to change(Shift, :count).by(-1) 
     end
   end
+
+  describe 'PUT #update' do
+        let!(:shift) { Shift.create(start_time: "2024-04-29T08:00:00", end_time: "2024-04-29T16:00:00", date: "2024-04-29", worker_id: worker.id) }
+
+        context 'with valid params' do
+            let(:valid_params) { { start_time: "2024-04-29T00:00:00", end_time: "2024-04-29T08:00:00" } }
+            before { patch :update, params: { id: shift.id, shift: valid_params } }
+
+            it 'updates the requested shift' do
+                expect(shift.reload.start_time.strftime("%Y-%m-%dT%H:%M:%S"))
+                .to eq(valid_params[:start_time])
+
+                expect(shift.reload.end_time.strftime("%Y-%m-%dT%H:%M:%S"))
+                .to eq(valid_params[:end_time])
+            end
+
+            it 'returns a success status' do
+                expect(response).to have_http_status(:ok)
+            end
+        end
+
+        context 'with invalid params' do
+            context 'with invalid start time (after end time)' do
+                let(:invalid_params) { { start_time: "2024-04-30T14:00:00", end_time: "2024-04-30T12:00:00" } }
+
+                before { put :update, params: { id: shift.id, shift: invalid_params } }
+
+                it 'does not update the shift' do
+                    expect(shift.reload.start_time).to_not eq(invalid_params[:start_time])
+                end
+
+                it 'returns an unprocessable_entity status' do
+                    expect(response).to have_http_status(:unprocessable_entity)
+                end
+            end
+        end
+   end
 end
