@@ -24,11 +24,10 @@
 ```
 
 ## localhost:3000/shifts `(POST)`
-`Retrive Auth token for authentication purpose`
 ```
     {
         "shift": {
-            "start_time": "2024-04-29T11:00:00",
+            "start_time": "2024-04-29T08:00:00",
             "end_time": "2024-04-29T16:00:00",
             "date": "2024-04-29",
             "worker_id": 8
@@ -44,3 +43,15 @@
 
 ## localhost:3000/workers/:id/shifts `(GET)`
 
+## localhost:3000/shifts `(PATCH)`
+```
+    {
+        "shift": {
+            "start_time": "2024-04-29T08:00:00",
+            "end_time": "2024-04-29T16:00:00",
+            "date": "2024-04-29",
+            "worker_id": 10
+        }
+    }
+
+```
