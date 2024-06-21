@@ -18,11 +18,11 @@ permissions:
 
 jobs:
   test:
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
         ruby-version: ['2.6', '2.7', '3.0', '3.1']
+    timeout-minutes: 30  # Increase this value if necessary
 
     steps:
     - uses: actions/checkout@v4
@@ -31,5 +31,8 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby-version }}
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+    - name: Install Bundler
+      run: gem install bundler -v 2.3.15
     - name: Run tests
       run: bundle exec rake
+
