@@ -35,7 +35,7 @@ class Shift < ApplicationRecord
       end
 
       unless [range_0_8, range_8_16, range_16_24].any? { |range| range.first == start_time.hour && range.last == end_hour }
-        errors.add(:baend_timese, "Shift time range is invalid. Must be within 0-8, 8-16, or 16-24.")
+        errors.add(:base, "Shift time range is invalid. Must be within 0-8, 8-16, or 16-24.")
       end
     end
   end
